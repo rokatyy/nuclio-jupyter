@@ -54,6 +54,8 @@ def build_file(filename='', name='', handler='', archive=False, project='',
             # override with local file path
             filename = tmpfile.name
 
+        else:
+            filebase = normalize_name(filebase)
         config, code = build_notebook(filename, dont_embed, tag, name, ignored_tags=ignored_tags)
         nb_files = config['metadata']['annotations'].get(meta_keys.extra_files)
         ext = '.py'
@@ -86,7 +88,7 @@ def build_file(filename='', name='', handler='', archive=False, project='',
     name = normalize_name(name or filebase)
     update_in(config, 'metadata.name', name)
     config = extend_config(config, spec, tag, filename)
-    set_handler(config, normalize_name(filebase), '' if kind else handler, ext)
+    set_handler(config, filebase, '' if kind else handler, ext)
 
     log = logger.info if verbose else logger.debug
     log('Code:\n{}'.format(code))
